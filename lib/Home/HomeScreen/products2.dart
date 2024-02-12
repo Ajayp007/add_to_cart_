@@ -1,3 +1,4 @@
+import 'package:add_to_cart/utiles/product.dart';
 import 'package:flutter/material.dart';
 
 class Products2 extends StatefulWidget {
@@ -10,56 +11,64 @@ class Products2 extends StatefulWidget {
 class _Products2State extends State<Products2> {
   @override
   Widget build(BuildContext context) {
-    Map data = ModalRoute.of(context)!.settings.arguments as Map;
     return SafeArea(
         child: Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: const Text("My Cart"),
+        backgroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 350,
-            decoration: const BoxDecoration(
-                color: Color(0xffDC4339),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60))),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.search_rounded,
-                              size: 30,
-                              color: Colors.black45,
-                            ),
-                            SizedBox(width: 20),
-                          ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: cart
+              .map(
+                (e) => Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                        color: const Color(0xffDC4339),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        Image.asset(
+                          e['photo'],
+                          height: 150,
                         ),
-                      ),
-                    ],
+                        const Spacer(flex: 1),
+                        Text(
+                          e['name'],
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 25),
+                        ),
+                        const Spacer(flex: 5),
+                        Text(
+                          "\$${e['price']}",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 25),
+                        ),
+                        const Spacer(flex: 1),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              cart.remove(e);
+                            });
+                          },
+                          child: const Icon(
+                            Icons.delete,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Image.asset(
-                  "${data['photo']}",
-                  height: 250,
-                ),
-              ],
-            ),
-          )
-        ],
+              )
+              .toList(),
+        ),
       ),
     ));
   }
